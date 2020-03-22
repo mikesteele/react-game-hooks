@@ -1,6 +1,28 @@
 # react-game-hooks
 Hooks for creating 2D platform games in React 
 
+## API
+
+### usePosition
+
+```
+const [spritePosition, moveSprite] = usePosition(initialBoundingBox);
+```
+
+`usePosition` creates a bounding box for a sprite. It comes with:
+
+```
+
+```
+
+It also registers the position to prevent collisions with other positions.
+
+### useInteraction
+
+```
+useInteraction(position1, position2, callback);
+```
+
 ## Guidelines
 
 ### A sprite is one position and its interactions

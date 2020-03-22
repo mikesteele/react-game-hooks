@@ -72,3 +72,31 @@ const City = () => {
 ```
 
 This allows for variable amounts and types sprites on a screen.
+
+### Couple sprite wrappers to scenes, abstract shared visuals
+
+Positions and interactions of sprites change in different scenes. Instead of making bulky shared sprites full of complex scene logic, prefer to couple "sprite wrappers" to scenes, which define positions and interactions.
+
+```jsx
+// This Sprite can contain walking animations, etc.
+import EnemySprite from './EnemySprite';
+
+const EnemySpriteWrapper = () => {
+  const position = usePosition();
+  
+  // Define interactions specific to this scene
+  
+  return (
+    <EnemySprite position={position} />
+  );
+};
+
+const FinalBossScene = () => {
+  return (
+    <EnemySpriteWrapper/>
+  );
+};
+
+```
+
+```

@@ -30,3 +30,17 @@ const usePosition = initialPosition => {
     }
   }
 }
+
+const NonPlayableCharacter = props => {
+  const [position, move] = usePosition(initialPosition);
+  useInteraction(position, props.userPosition, props.onUserInteraction);
+  return (
+    <Sprite/>
+  );
+};
+    
+const City = () => {
+  return (
+    {characters.map(c => <NonPlayableCharacter/>}
+  );
+}

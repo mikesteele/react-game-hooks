@@ -1,6 +1,10 @@
 # react-game-hooks
 Hooks for creating 2D platform games in React 
 
+## Guidelines
+
+These are not hard rules, but helpful in creating a larger 
+
 ### A sprite (?) is one position and its interactions
 
 Due to the rules of hooks, you can't create hooks in loops.

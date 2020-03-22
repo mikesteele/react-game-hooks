@@ -9,7 +9,7 @@ Due to the rules of hooks, you can't create hooks in conditions or loops. But sc
 
 As opposed to creating a group of non-playable sprites like this:
 
-```
+```jsx
 const City = () => {
   const [position, move] = usePosition(initialPosition);
   const [position, move] = usePosition(initialPosition);
@@ -27,7 +27,7 @@ const City = () => {
 
 Move the positions into their own component:
 
-```
+```jsx
 const NonPlayableCharacter = props => {
   const [position, move] = usePosition(initialPosition);
   useInteraction(position, props.userPosition, props.onUserInteraction);

@@ -3,13 +3,11 @@ Hooks for creating 2D platform games in React
 
 ## Guidelines
 
-These are not hard rules, but helpful in creating a larger 
+### A sprite is one position and its interactions
 
-### A sprite (?) is one position and its interactions
+Due to the rules of hooks, you can't create hooks in conditions or loops. But screens in games often have variable amounts and types of sprites depending on game context.
 
-Due to the rules of hooks, you can't create hooks in loops.
-
-As opposed to creating a group of non-playable characters like this:
+As opposed to creating a group of non-playable sprites like this:
 
 ```
 const City = () => {

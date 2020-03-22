@@ -1,5 +1,10 @@
 # react-game-hooks
-Hooks for creating 2D platform games in React 
+Hooks for creating 2D platform games in React
+
+This library focuses primarily on:
+* Bounding box calculation
+* Interactions between bounding boxes
+* Preventing collisions between bounding boxes
 
 ## API
 

@@ -21,8 +21,7 @@ function useInterval(callback, delay) {
   }, [delay]);
 }
 
-// Should be 1000 / 26 for 26 fps
-const UPDATE_RATE = 100;
+const UPDATE_RATE = 1000 / 26;
 
 const usePosition = (x, y, width, height) => {
   const [position, setPosition] = React.useState({
@@ -56,11 +55,27 @@ const usePosition = (x, y, width, height) => {
       position.x !== moveConfig.targetX ||
       position.y !== moveConfig.targetY
     ) {
-      setPosition(position => ({
-        ...position,
-        x: position.x + moveConfig.xDelta,
-        y: position.y + moveConfig.yDelta
-      }));
+      setPosition(position => {
+        let nextX = position.x + moveConfig.xDelta;
+        let nextY = position.y + moveConfig.yDelta;
+        if (
+          (position.x < moveConfig.targetX && nextX > moveConfig.targetX) ||
+          (position.x > moveConfig.targetX && nextX < moveConfig.targetX)
+        ) {
+          nextX = moveConfig.targetX;
+        }
+        if (
+          (position.y < moveConfig.targetY && nextY > moveConfig.targetY) ||
+          (position.y > moveConfig.targetY && nextY < moveConfig.targetY)
+        ) {
+          nextY = moveConfig.targetY;
+        }
+        return {
+          ...position,
+          x: nextX,
+          y: nextY
+        };
+      });
     }
   }, [position, moveConfig]);
   useInterval(moveCallback, UPDATE_RATE);
@@ -84,7 +99,13 @@ export default function App() {
     left: position.x
   };
   const onClickButtonOne = () => {
-    move(300, 100, 1000);
+    move(300, 100, 600);
+  };
+  const onClickButtonTwo = () => {
+    move(100, 300, 200);
+  };
+  const onClickButtonThree = () => {
+    move(0, 100);
   };
   return (
     <>
@@ -93,6 +114,8 @@ export default function App() {
         <h2>Start editing to see some magic happen!</h2>
       </div>
       <button onClick={onClickButtonOne}>Button One</button>
+      <button onClick={onClickButtonTwo}>Button 2</button>
+      <button onClick={onClickButtonThree}>Button 3</button>
     </>
   );
 }

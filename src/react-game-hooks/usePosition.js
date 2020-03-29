@@ -1,27 +1,6 @@
-import React from "react";
-import "./styles.css";
-
-function useInterval(callback, delay) {
-  const savedCallback = React.useRef();
-
-  // Remember the latest callback.
-  React.useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
-
-  // Set up the interval.
-  React.useEffect(() => {
-    function tick() {
-      savedCallback.current();
-    }
-    if (delay !== null) {
-      let id = setInterval(tick, delay);
-      return () => clearInterval(id);
-    }
-  }, [delay]);
-}
-
-const UPDATE_RATE = 1000 / 26;
+import React from 'react';
+import useInterval from './useInterval';
+import { UPDATE_RATE } from './constants';
 
 const usePosition = (x, y, width, height) => {
   const [position, setPosition] = React.useState({
@@ -29,12 +8,6 @@ const usePosition = (x, y, width, height) => {
     y,
     width,
     height
-  });
-  const [moveConfig, setMoveConfig] = React.useState({
-    targetX: x,
-    targetY: y,
-    xDelta: 0,
-    yDelta: 0
   });
   const boundingBox = {
     topLeft: {
@@ -50,6 +23,12 @@ const usePosition = (x, y, width, height) => {
     y: position.y,
     boundingBox
   };
+  const [moveConfig, setMoveConfig] = React.useState({
+    targetX: x,
+    targetY: y,
+    xDelta: 0,
+    yDelta: 0
+  });
   const moveCallback = React.useCallback(() => {
     if (
       position.x !== moveConfig.targetX ||
@@ -91,31 +70,4 @@ const usePosition = (x, y, width, height) => {
   return [formattedPosition, requestMove];
 };
 
-export default function App() {
-  const [position, move] = usePosition(100, 100, 100, 100);
-  const styles = {
-    position: "fixed",
-    top: position.y,
-    left: position.x
-  };
-  const onClickButtonOne = () => {
-    move(300, 100, 600);
-  };
-  const onClickButtonTwo = () => {
-    move(100, 300, 200);
-  };
-  const onClickButtonThree = () => {
-    move(0, 100);
-  };
-  return (
-    <>
-      <div style={styles}>
-        <h1>Hello CodeSandbox</h1>
-        <h2>Start editing to see some magic happen!</h2>
-      </div>
-      <button onClick={onClickButtonOne}>Button One</button>
-      <button onClick={onClickButtonTwo}>Button 2</button>
-      <button onClick={onClickButtonThree}>Button 3</button>
-    </>
-  );
-}
+export default usePosition;

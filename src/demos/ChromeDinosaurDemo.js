@@ -1,4 +1,10 @@
-import React, { useLayoutEffect, useRef, useState, useCallback } from 'react';
+import React, {
+  useLayoutEffect,
+  useRef,
+  useState,
+  useEffect,
+  Fragment
+} from 'react';
 import {
   useInterval,
   usePosition,
@@ -24,16 +30,25 @@ const world = css`
   width: 1000000px;
 `;
 
+const gameOverWrapper = css`
+  position: fixed;
+  top: 0;
+  left: 0;
+`;
+
+const gameOver = css`
+  font-family: sans-serif;
+`;
+
 const Dinosaur = props => (
   <div
     style={{
-      background: 'salmon',
+      background: props.isGameOver ? 'url("dinosaur-dead.png")' : 'url("dinosaur.png")',
       position: 'absolute',
-      left: props.position.x,
-      top: props.position.y,
+      transform: `translateX(${props.position.x}px) translateY(${props.position.y}px)`,
       // TODO - These should come from position
-      width: 10,
-      height: 100
+      width: 80,
+      height: 86
     }}
   />
 );
@@ -57,8 +72,8 @@ const Obstacle = props => {
     position: 'absolute',
     width,
     height,
-    marginLeft: x,
-    marginTop: y
+    background: 'url("cactus.png")',
+    transform: `translateX(${x}px) translateY(${y}px)`,
   };
 
   return (
@@ -67,7 +82,7 @@ const Obstacle = props => {
 };
 
 const ChromeDinosaurDemo = () => {
-  const [dinosaurPosition, moveDinosaur] = usePosition(0, 200, 10, 100);
+  const [dinosaurPosition, moveDinosaur] = usePosition(0, 200, 80, 86);
   const [isGameOver, setIsGameOver] = useState(false);
   const viewBoxRef = useRef();
   const [isJumping, setIsJumping] = useState(false);
@@ -76,7 +91,7 @@ const ChromeDinosaurDemo = () => {
   useInterval(() => {
     if (!isGameOver) {
       const targetY = isJumping ? 100 : 200;
-      moveDinosaur(dinosaurPosition.x + 40, targetY, 100);
+      moveDinosaur(dinosaurPosition.x + 80, targetY, 100);
     }
   }, 100);
 
@@ -86,6 +101,24 @@ const ChromeDinosaurDemo = () => {
       viewBoxRef.current.scrollLeft = dinosaurPosition.x - 40;
     }
   }, [dinosaurPosition, viewBoxRef]);
+
+  // Create 100 obstacles
+  const obstacles = [...Array(100).keys()].map(offset => (
+    <Obstacle
+      width={30}
+      height={66}
+      x={1000 + (offset * 1000)}
+      y={220}
+      dinosaurPosition={dinosaurPosition}
+      onGameOver={() => setIsGameOver(true)}
+    />
+  ));
+
+  // Add onKeyDown listener to body
+  useEffect(() => {
+    document.body.addEventListener('keydown', onKeyDown);
+    return () => document.body.removeEventListener('keydown', onKeyDown);
+  }, []);
 
   const onKeyDown = e => {
     // Jump!
@@ -97,30 +130,35 @@ const ChromeDinosaurDemo = () => {
     }
   };
 
-  // Create 100 obstacles
-  const obstacles = [...Array(100).keys()].map(offset => (
-    <Obstacle
-      width={24}
-      height={24}
-      x={1000 + (offset * 10000)}
-      y={250}
-      dinosaurPosition={dinosaurPosition}
-      onGameOver={() => setIsGameOver(true)}
-    />
-  ));
+  const onRestart = () => {
+    moveDinosaur(1, 200);
+    window.setTimeout(() => {
+      setIsGameOver(false);
+      setIsJumping(false);
+    }, 100);
+  };
 
   return (
-    <div
-      className={viewBox}
-      ref={viewBoxRef}
-      onKeyDown={onKeyDown}
-      tabIndex={0}
-    >
-      <div className={world}>
-        <Dinosaur position={dinosaurPosition} />
-        {obstacles}
+    <Fragment>
+      <div
+        className={viewBox}
+        ref={viewBoxRef}
+      >
+        <div className={world}>
+          <Dinosaur
+            position={dinosaurPosition}
+            isGameOver={isGameOver}
+          />
+          {obstacles}
+        </div>
       </div>
-    </div>
+      {isGameOver && (
+        <div className={gameOverWrapper}>
+          <h1 className={gameOver}>GAME OVER</h1>
+          <button onClick={onRestart}>Play again?</button>
+        </div>
+      )}
+    </Fragment>
   );
 };
 

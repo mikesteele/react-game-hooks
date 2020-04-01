@@ -1,4 +1,7 @@
 import React from 'react';
+import { UPDATE_RATE } from './constants';
+
+export const useFrameRateInterval = (callback) => useInterval(callback, UPDATE_RATE);
 
 // From https://overreacted.io/making-setinterval-declarative-with-react-hooks/
 const useInterval = (callback, delay) => {

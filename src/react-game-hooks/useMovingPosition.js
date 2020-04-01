@@ -37,7 +37,7 @@ const useMovingPosition = (x, y, width, height, initialAngle, initialVelocity) =
         y: nextY
       };
     });
-  }, [position, angle, velocity]);
+  }, [angle, velocity]);
   useInterval(moveCallback, UPDATE_RATE);
 
   return [formattedPosition, changeAngle, changeVelocity];

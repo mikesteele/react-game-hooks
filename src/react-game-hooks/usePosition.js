@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import useInterval from './useInterval';
 import { UPDATE_RATE } from './constants';
 
@@ -58,15 +58,21 @@ const usePosition = (x, y, width, height) => {
     }
   }, [position, moveConfig]);
   useInterval(moveCallback, UPDATE_RATE);
-  const requestMove = (targetX, targetY, timeLength) => {
+  const requestMove = useCallback((targetX, targetY, timeLength) => {
     const time = timeLength || 1;
-    setMoveConfig({
-      targetX,
-      targetY,
-      xDelta: (targetX - position.x) / (time / UPDATE_RATE),
-      yDelta: (targetY - position.y) / (time / UPDATE_RATE)
+    setMoveConfig(previousMoveConfig => {
+      const nextTargetX = Number(targetX) ? targetX : previousMoveConfig.targetX;
+      const nextTargetY = Number(targetY) ? targetY : previousMoveConfig.targetY;
+      // FIXME - This should probably not recalculate xDelta/yDelta if only requesting movement in one dimension.
+      // See jumping in ChromeDinosaurDemo as an example.
+      return {
+        targetX: nextTargetX,
+        targetY: nextTargetY,
+        xDelta: (nextTargetX - position.x) / (time / UPDATE_RATE),
+        yDelta: (nextTargetY - position.y) / (time / UPDATE_RATE)
+      };
     });
-  };
+  }, [setMoveConfig, position]);
   return [formattedPosition, requestMove];
 };
 

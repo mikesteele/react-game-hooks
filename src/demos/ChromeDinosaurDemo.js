@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState, useCallback } from 'react';
 import {
   useInterval,
   usePosition,
@@ -70,11 +70,13 @@ const ChromeDinosaurDemo = () => {
   const [dinosaurPosition, moveDinosaur] = usePosition(0, 200, 10, 100);
   const [isGameOver, setIsGameOver] = useState(false);
   const viewBoxRef = useRef();
+  const [isJumping, setIsJumping] = useState(false);
 
   // Keep moving the dinosaur to the right in space
   useInterval(() => {
     if (!isGameOver) {
-      moveDinosaur(dinosaurPosition.x + 40, null, 100);
+      const targetY = isJumping ? 100 : 200;
+      moveDinosaur(dinosaurPosition.x + 40, targetY, 100);
     }
   }, 100);
 
@@ -88,10 +90,10 @@ const ChromeDinosaurDemo = () => {
   const onKeyDown = e => {
     // Jump!
     if (e.keyCode === 74) {
-      moveDinosaur(null, 100, 100);
+      setIsJumping(true);
       window.setTimeout(() => {
-        moveDinosaur(null, 200, 100);
-      }, 200);
+        setIsJumping(false);
+      }, 400);
     }
   };
 
@@ -100,7 +102,7 @@ const ChromeDinosaurDemo = () => {
     <Obstacle
       width={24}
       height={24}
-      x={1000 + (offset * 1000)}
+      x={1000 + (offset * 10000)}
       y={250}
       dinosaurPosition={dinosaurPosition}
       onGameOver={() => setIsGameOver(true)}

@@ -21,7 +21,9 @@ const usePosition = (x, y, width, height) => {
   const formattedPosition = {
     x: position.x,
     y: position.y,
-    boundingBox
+    boundingBox,
+    width,
+    height
   };
   const [moveConfig, setMoveConfig] = React.useState({
     targetX: x,

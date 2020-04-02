@@ -21,7 +21,9 @@ const useMovingPosition = (x, y, width, height, initialAngle, initialVelocity) =
   const formattedPosition = {
     x: position.x,
     y: position.y,
-    boundingBox
+    boundingBox,
+    width,
+    height
   };
 
   const [angle, changeAngle] = React.useState(initialAngle);

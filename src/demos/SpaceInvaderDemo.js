@@ -7,6 +7,8 @@ import {
   useInterval,
   usePosition,
   useInteraction,
+  World,
+  withWorld
 } from '../react-game-hooks';
 import _remove from 'lodash/remove';
 
@@ -105,7 +107,7 @@ const Enemy = props => {
 }
 
 const SpaceInvaderDemo = () => {
-  const [heroPosition, moveHero] = usePosition(200, 200, 64, 16);
+  const [heroPosition, moveHero] = usePosition(200, 600, 64, 16);
   const [heroBullets, setHeroBullets] = useState([]);
   const [enemyPosition, moveEnemy] = usePosition(200, 100, 64, 16);
 
@@ -159,4 +161,4 @@ const SpaceInvaderDemo = () => {
   );
 }
 
-export default SpaceInvaderDemo;
+export default withWorld(SpaceInvaderDemo);

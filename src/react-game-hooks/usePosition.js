@@ -1,14 +1,34 @@
-import React, { useCallback } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useState
+} from 'react';
 import useInterval from './useInterval';
 import { UPDATE_RATE } from './constants';
+import { WorldContext } from './World';
+import { uniqueId } from 'lodash';
 
 const usePosition = (x, y, width, height) => {
-  const [position, setPosition] = React.useState({
+  const [id] = useState(uniqueId());
+  const [allPositions, addSelf, removeSelf] = useContext(WorldContext);
+
+  const initialPosition = {
     x,
     y,
     width,
-    height
-  });
+    height,
+    id
+  };
+
+  const [position, setPosition] = useState(initialPosition);
+
+  // On mount, register with world context
+  useEffect(() => {
+    addSelf(initialPosition);
+    return () => removeSelf(initialPosition)
+  }, []);
+
   const boundingBox = {
     topLeft: {
       x: position.x,

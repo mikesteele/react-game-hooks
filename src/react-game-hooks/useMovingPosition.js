@@ -1,14 +1,34 @@
-import React from 'react';
+import React, {
+  useState,
+  useContext,
+  useCallback,
+  useEffect
+} from 'react';
 import useInterval from './useInterval';
 import { UPDATE_RATE } from './constants';
+import { WorldContext } from './World';
+import { uniqueId } from 'lodash';
 
 const useMovingPosition = (x, y, width, height, initialAngle, initialVelocity) => {
-  const [position, setPosition] = React.useState({
+  const [id] = useState(uniqueId());
+  const [allPositions, addSelf, removeSelf] = useContext(WorldContext);
+
+  const initialPosition = {
     x,
     y,
     width,
-    height
-  });
+    height,
+    id
+  };
+
+  const [position, setPosition] = useState(initialPosition);
+
+  // On mount, register with world context
+  useEffect(() => {
+    addSelf(initialPosition);
+    return () => removeSelf(initialPosition)
+  }, []);
+
   const boundingBox = {
     topLeft: {
       x: position.x,
@@ -26,10 +46,10 @@ const useMovingPosition = (x, y, width, height, initialAngle, initialVelocity) =
     height
   };
 
-  const [angle, changeAngle] = React.useState(initialAngle);
-  const [velocity, changeVelocity] = React.useState(initialVelocity);
+  const [angle, changeAngle] = useState(initialAngle);
+  const [velocity, changeVelocity] = useState(initialVelocity);
 
-  const moveCallback = React.useCallback(() => {
+  const moveCallback = useCallback(() => {
     setPosition(position => {
       let nextX = position.x + (Math.cos(angle) * velocity);
       let nextY = position.y + (Math.sin(angle) * velocity);

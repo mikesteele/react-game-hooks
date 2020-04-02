@@ -8,6 +8,7 @@ import {
   usePosition,
   useInteraction,
 } from '../react-game-hooks';
+import _remove from 'lodash/remove';
 
 const Sprite = props => (
   <div
@@ -24,7 +25,9 @@ const Sprite = props => (
 
 const HeroBullet = props => {
   const {
-    enemyPosition
+    enemyPosition,
+    id,
+    removeHeroBullet
   } = props;
 
   const [bulletPosition] = useMovingPosition(
@@ -37,7 +40,8 @@ const HeroBullet = props => {
   );
 
   useInteraction(bulletPosition, enemyPosition, () => {
-    alert('Bullet hit enemy!');
+    removeHeroBullet(id);
+    // alert('Bullet hit enemy!');
   });
 
   return (
@@ -60,7 +64,7 @@ const EnemyBullet = props => {
   );
 
   useInteraction(bulletPosition, heroPosition, () => {
-    alert('Bullet hit user!');
+  //  alert('Bullet hit user!');
   });
 
   return (
@@ -105,10 +109,17 @@ const SpaceInvaderDemo = () => {
   const [heroBullets, setHeroBullets] = useState([]);
   const [enemyPosition, moveEnemy] = usePosition(200, 100, 64, 16);
 
+  const removeHeroBullet = id  => {
+    setHeroBullets(bullets => {
+      _remove(bullets, b => b.id === id);
+      return bullets;
+    });
+  };
+
   // Add onKeyDown listener to body
   useEffect(() => {
     const fireBullet = () => {
-      setHeroBullets(bullets => [...bullets, 1]);
+      setHeroBullets(bullets => [...bullets, { id: Date.now() }]);
     };
     const onKeyDown = e => {
       if (e.keyCode === 37) {
@@ -130,11 +141,13 @@ const SpaceInvaderDemo = () => {
   return (
     <div>
       <Sprite position={heroPosition} />
-      {heroBullets.map((bullet, i) => (
+      {heroBullets.map(bullet => (
         <HeroBullet
           heroPosition={heroPosition}
           enemyPosition={enemyPosition}
-          key={i}
+          key={bullet.id}
+          id={bullet.id}
+          removeHeroBullet={removeHeroBullet}
         />
       ))}
       <Enemy

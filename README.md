@@ -10,7 +10,7 @@ Demos can be found in `src/demos`.
 
 Positions represent objects in 2D space. They come with a bounding box that allows for collision detection with other positions via `useInteraction`.
 
-#### const [position, requestMove] = usePosition(x, y, width, height)
+#### const [position, move(newX, newY, timeLength)] = usePosition(x, y, width, height)
 
 Creates a controlled position.
 

@@ -1,5 +1,7 @@
 ## react-game-hooks [WIP]
 
+Demos can be found in `src/demos`.
+
 ### API
 
 #### Positions
@@ -10,7 +12,9 @@ Positions represent objects in 2D space. They come with a bounding box with allo
 
 Creates a controlled position.
 
-#### const [position, changeAngle, changeVelocity]
+#### const [position, changeAngle, changeVelocity] = useMovingPosition(x, y, width, height, initialAngle, initialVelocity)
+
+Creates a position that moves on its own, in direction defined by `angle` and with speed defined by `velocity`.
 
 ### useInteraction(position, position, callback)
 

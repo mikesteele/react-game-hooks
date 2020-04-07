@@ -6,7 +6,7 @@ Demos can be found in `src/demos`.
 
 ### Positions
 
-Positions represent objects in 2D space. They come with a bounding box with allows for collision detection with other positions via `useInteraction`.
+Positions represent objects in 2D space. They come with a bounding box that allows for collision detection with other positions via `useInteraction`.
 
 #### const [position, requestMove] = usePosition(x, y, width, height)
 

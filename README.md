@@ -1,5 +1,7 @@
 ## react-game-hooks [WIP]
 
+Hooks can be found in `src/react-game-hooks`.
+
 Demos can be found in `src/demos`.
 
 ### API

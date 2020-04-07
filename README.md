@@ -14,9 +14,9 @@ Positions represent objects in 2D space. They come with a bounding box that allo
 
 Creates a controlled position.
 
-#### const [position, changeAngle, changeVelocity] = useMovingPosition(x, y, width, height, initialAngle, initialVelocity)
+#### const [position, changeAngle(newAngle), changeVelocity(newVelocity)] = useMovingPosition(x, y, width, height, initialAngle, initialVelocity)
 
-Creates a position that moves on its own, in direction defined by `angle` and with speed defined by `velocity`.
+Creates a position that moves on its own, in direction defined by `angle` and with speed defined by `velocity`. Angle is in radians.
 
 ### Collisions
 

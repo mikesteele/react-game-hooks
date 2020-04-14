@@ -57,14 +57,6 @@ const usePosition = (x, y, width, height) => {
     bottomLeft: { x: position.x, y: position.y + height },
     bottomRight: { x: position.x + width, y: position.y + height }
   };
-  const formattedPosition = {
-    x: position.x,
-    y: position.y,
-    boundingBox,
-    width,
-    height,
-    id
-  };
   const [moveConfig, setMoveConfig] = React.useState({
     targetX: x,
     targetY: y,
@@ -78,6 +70,8 @@ const usePosition = (x, y, width, height) => {
     ) {
       let moveCancelled = false;
       let collisionTargetId = null;
+      let reachedXTarget = false;
+      let reachedYTarget = false;
       setPosition(position => {
         let nextX = position.x + moveConfig.xDelta;
         let nextY = position.y + moveConfig.yDelta;
@@ -88,12 +82,14 @@ const usePosition = (x, y, width, height) => {
             (position.x > moveConfig.targetX && nextX < moveConfig.targetX)
           ) {
             nextX = moveConfig.targetX;
+            reachedXTarget = true;
           }
           if (
             (position.y < moveConfig.targetY && nextY > moveConfig.targetY) ||
             (position.y > moveConfig.targetY && nextY < moveConfig.targetY)
           ) {
             nextY = moveConfig.targetY;
+            reachedYTarget = true;
           }
           return {
             ...position,
@@ -116,6 +112,18 @@ const usePosition = (x, y, width, height) => {
         });
         onCollison(id, collisionTargetId);
       }
+      if (reachedXTarget) {
+        setMoveConfig({
+          targetX: position.x,
+          xDelta: 0,
+        });
+      }
+      if (reachedYTarget) {
+        setMoveConfig({
+          targetY: position.y,
+          yDelta: 0,
+        });
+      }
     }
   }, [position, moveConfig, setMoveConfig, addSelf, canMoveToTarget]);
   useInterval(moveCallback, UPDATE_RATE);
@@ -134,6 +142,15 @@ const usePosition = (x, y, width, height) => {
       };
     });
   }, [setMoveConfig, position]);
+  const formattedPosition = {
+    x: position.x,
+    y: position.y,
+    boundingBox,
+    width,
+    height,
+    id,
+    isMoving: (moveConfig.xDelta !== 0) || (moveConfig.yDelta !== 0)
+  };
   return [formattedPosition, requestMove];
 };
 

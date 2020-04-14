@@ -7,6 +7,9 @@ const Sprite = props => {
   } else if (props.backgroundColor) {
     background = props.backgroundColor;
   }
+  if (props.position.isMoving) {
+    background = 'gold';
+  }
   return (
     <div
       style={{

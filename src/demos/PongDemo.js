@@ -3,36 +3,8 @@ import {
   useMovingPosition,
   usePosition,
   useInteraction,
+  Sprite
 } from '../react-game-hooks';
-
-const Ball = props => (
-  <div
-    style={{
-      borderRadius: '50%',
-      background: 'salmon',
-      position: 'fixed',
-      left: props.position.x,
-      top: props.position.y,
-      // TODO - These should come from position
-      width: 36,
-      height: 36
-    }}
-  />
-);
-
-const Paddle = props => (
-  <div
-    style={{
-      background: 'black',
-      position: 'fixed',
-      left: props.position.x,
-      top: props.position.y,
-      // TODO - These should come from position
-      width: 32,
-      height: 400
-    }}
-  />
-);
 
 const PongDemo = () => {
   const [leftPaddlePosition, moveLeftPaddle] = usePosition(100, 100, 32, 400);
@@ -58,9 +30,9 @@ const PongDemo = () => {
 
   return (
     <div style={viewboxStyles} onMouseMove={onMouseMove}>
-      <Paddle position={leftPaddlePosition}/>
-      <Paddle position={rightPaddlePosition}/>
-      <Ball position={ballPosition}/>
+      <Sprite position={leftPaddlePosition} backgroundColor='black' />
+      <Sprite position={rightPaddlePosition} backgroundColor='black' />
+      <Sprite position={ballPosition} style={{ borderRadius: '50%' }}/>
     </div>
   );
 }

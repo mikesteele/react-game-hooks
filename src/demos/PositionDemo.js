@@ -1,16 +1,8 @@
 import React from 'react';
-import { usePosition } from '../react-game-hooks';
+import { usePosition, Sprite } from '../react-game-hooks';
 
 const PositionDemo = () => {
   const [position, move] = usePosition(100, 100, 100, 100);
-  const styles = {
-    position: 'fixed',
-    top: position.y,
-    left: position.x,
-    width: 100,
-    height: 100,
-    background: 'salmon'
-  };
   const onClickButtonOne = () => {
     move(300, 100, 600);
   };
@@ -22,7 +14,7 @@ const PositionDemo = () => {
   };
   return (
     <>
-      <div style={styles} />
+      <Sprite position={position} />
       <button onClick={onClickButtonOne}>Button 1</button>
       <button onClick={onClickButtonTwo}>Button 2</button>
       <button onClick={onClickButtonThree}>Button 3</button>

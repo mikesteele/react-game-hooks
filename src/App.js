@@ -2,6 +2,7 @@ import React from 'react';
 import PositionDemo from './demos/PositionDemo';
 import PongDemo from './demos/PongDemo';
 import ChromeDinosaurDemo from './demos/ChromeDinosaurDemo';
+import PokemonDemo from './demos/PokemonDemo';
 import { css } from 'emotion';
 
 const button = css`
@@ -13,7 +14,8 @@ const button = css`
 const demos = {
   position: <PositionDemo />,
   pong: <PongDemo />,
-  dinosaur: <ChromeDinosaurDemo />
+  dinosaur: <ChromeDinosaurDemo />,
+  pokemon: <PokemonDemo />
 }
 
 const App = () => {

@@ -7,6 +7,7 @@ import React, {
   Fragment
 } from 'react';
 import {
+  useCollision,
   useInterval,
   usePosition,
   useInteraction,
@@ -28,12 +29,12 @@ const PokeCenter = props => {
   const [exitDoorPosition] = usePosition(700, 100, 64, 16);
 
   useEffect(() => {
-    moveUser(700, 150);
+    moveUser(700, 150, 1);
   }, []);
 
-  useInteraction(userPosition, exitDoorPosition, () => {
+  useCollision(userPosition, exitDoorPosition, () => {
     setSetting('city');
-    moveUser(300, 200);
+    moveUser(300, 200, 1);
   });
 
   return (
@@ -60,9 +61,9 @@ const City = props => {
   ] = useWalls(100, 100, 800, 100, 800, 500, 100, 500);
 
   const [pokeCenterPosition] = usePosition(300, 300, 64, 64);
-  const [pokeCenterDoorPosition] = usePosition(314, 300, 36, 12);
+  const [pokeCenterDoorPosition] = usePosition(314, 290, 36, 12);
 
-  useInteraction(userPosition, pokeCenterDoorPosition, () => {
+  useCollision(userPosition, pokeCenterDoorPosition, () => {
     setSetting('poke-center');
   });
 

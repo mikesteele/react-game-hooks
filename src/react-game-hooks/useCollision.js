@@ -14,14 +14,9 @@ const useCollision = (position1, position2, callback) => {
   const removeCollison = worldContext[6];
 
   useEffect(() => {
-    addCollison({
-      id,
-      callback
-    });
-    return () => removeCollison({
-      id
-    });
-  }, [callback]);
+    addCollison(position1, position2, id, callback);
+    return () => removeCollison(position1, position2, id, callback);
+  }, [id, callback, addCollison, removeCollison]);
 };
 
 export default useCollision;

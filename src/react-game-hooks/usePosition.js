@@ -77,10 +77,12 @@ const usePosition = (x, y, width, height) => {
       position.y !== moveConfig.targetY
     ) {
       let moveCancelled = false;
+      let collisionTargetId = null;
       setPosition(position => {
         let nextX = position.x + moveConfig.xDelta;
         let nextY = position.y + moveConfig.yDelta;
-        if (canMoveToTarget(nextX, nextY, position.id)) {
+        collisionTargetId = canMoveToTarget(nextX, nextY, position.id);
+        if (!collisionTargetId) {
           if (
             (position.x < moveConfig.targetX && nextX > moveConfig.targetX) ||
             (position.x > moveConfig.targetX && nextX < moveConfig.targetX)
@@ -112,7 +114,7 @@ const usePosition = (x, y, width, height) => {
           xDelta: 0,
           yDelta: 0
         });
-
+        onCollison(id, collisionTargetId);
       }
     }
   }, [position, moveConfig, setMoveConfig, addSelf, canMoveToTarget]);

@@ -8,7 +8,8 @@ import React, {
 import {
   useInterval,
   usePosition,
-  useInteraction,
+  useCollision,
+  withWorld,
 } from '../react-game-hooks';
 import { css } from 'emotion';
 
@@ -66,7 +67,7 @@ const Obstacle = props => {
   const [ownPosition] = usePosition(x, y, width, height);
 
   // End the game if there's a collison
-  useInteraction(ownPosition, dinosaurPosition, onGameOver);
+  useCollision(ownPosition, dinosaurPosition, onGameOver);
 
   const obstacleStyles = {
     position: 'absolute',
@@ -162,4 +163,4 @@ const ChromeDinosaurDemo = () => {
   );
 };
 
-export default ChromeDinosaurDemo;
+export default withWorld(ChromeDinosaurDemo);

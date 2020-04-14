@@ -18,6 +18,18 @@ Creates a controlled position.
 
 Creates a position that moves on its own, in direction defined by `angle` and with speed defined by `velocity`. Angle is in radians.
 
+### World
+
+World provides internal context for positions to register, update, and deregister themselves. It also provides context for collisons to register and deregister.
+
+World allows for positions to be aware of other positions, to cancel movements and fire collision listeners if they collide.
+
+Wrap your App in `withWorld`:
+
+```
+withWorld(App);
+```
+
 ### Collisions
 
 #### useInteraction(position, position, callback)

@@ -5,9 +5,11 @@ import usePosition from './usePosition';
 import World, { withWorld } from './World';
 import useWalls from './useWalls';
 import Sprite from './Sprite';
+import useCollision from './useCollision';
 
 export {
   Sprite,
+  useCollision,
   useFrameRateInterval,
   useInteraction,
   useInterval,

@@ -9,9 +9,28 @@ import { UPDATE_RATE } from './constants';
 import { WorldContext } from './World';
 import { uniqueId } from 'lodash';
 
+export const makeFormattedPosition = position => {
+  const boundingBox = {
+    topLeft: {
+      x: position.x,
+      y: position.y
+    },
+    topRight: { x: position.x + position.width, y: position.y },
+    bottomLeft: { x: position.x, y: position.y + position.height },
+    bottomRight: { x: position.x + position.width, y: position.y + position.height }
+  };
+  return {
+    x: position.x,
+    y: position.y,
+    boundingBox,
+    width: position.width,
+    height: position.height,
+  };
+};
+
 const usePosition = (x, y, width, height) => {
   const [id] = useState(uniqueId());
-  const [allPositions, addSelf, removeSelf] = useContext(WorldContext);
+  const [allPositions, addSelf, removeSelf, canMoveToTarget, onCollison] = useContext(WorldContext);
 
   const initialPosition = {
     x,
@@ -43,7 +62,8 @@ const usePosition = (x, y, width, height) => {
     y: position.y,
     boundingBox,
     width,
-    height
+    height,
+    id
   };
   const [moveConfig, setMoveConfig] = React.useState({
     targetX: x,
@@ -56,29 +76,46 @@ const usePosition = (x, y, width, height) => {
       position.x !== moveConfig.targetX ||
       position.y !== moveConfig.targetY
     ) {
+      let moveCancelled = false;
       setPosition(position => {
         let nextX = position.x + moveConfig.xDelta;
         let nextY = position.y + moveConfig.yDelta;
-        if (
-          (position.x < moveConfig.targetX && nextX > moveConfig.targetX) ||
-          (position.x > moveConfig.targetX && nextX < moveConfig.targetX)
-        ) {
-          nextX = moveConfig.targetX;
-        }
-        if (
-          (position.y < moveConfig.targetY && nextY > moveConfig.targetY) ||
-          (position.y > moveConfig.targetY && nextY < moveConfig.targetY)
-        ) {
-          nextY = moveConfig.targetY;
-        }
-        return {
-          ...position,
-          x: nextX,
-          y: nextY
+        if (canMoveToTarget(nextX, nextY, position.id)) {
+          if (
+            (position.x < moveConfig.targetX && nextX > moveConfig.targetX) ||
+            (position.x > moveConfig.targetX && nextX < moveConfig.targetX)
+          ) {
+            nextX = moveConfig.targetX;
+          }
+          if (
+            (position.y < moveConfig.targetY && nextY > moveConfig.targetY) ||
+            (position.y > moveConfig.targetY && nextY < moveConfig.targetY)
+          ) {
+            nextY = moveConfig.targetY;
+          }
+          return {
+            ...position,
+            x: nextX,
+            y: nextY
+          };
+        } else {
+          // Move cancelled
+          moveCancelled = true;
+          return { ...position }
         };
       });
+      addSelf(position);
+      if (moveCancelled) {
+        setMoveConfig({
+          targetX: position.x,
+          targetY: position.y,
+          xDelta: 0,
+          yDelta: 0
+        });
+
+      }
     }
-  }, [position, moveConfig]);
+  }, [position, moveConfig, setMoveConfig, addSelf, canMoveToTarget]);
   useInterval(moveCallback, UPDATE_RATE);
   const requestMove = useCallback((targetX, targetY, timeLength) => {
     const time = timeLength || 1;

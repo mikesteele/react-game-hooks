@@ -1,4 +1,6 @@
 import React from 'react';
+import { isInteracting } from './useInteraction';
+import { makeFormattedPosition } from './usePosition';
 
 export const withWorld = WrappedComponent => props => (
   <World>
@@ -7,9 +9,13 @@ export const withWorld = WrappedComponent => props => (
 );
 
 export const WorldContext = React.createContext([
-  {},       // allPositions
-  () => {}, // addSelf
-  () => {}  // removeSelf
+  {},         // allPositions
+  () => {},   // addSelf
+  () => {},   // removeSelf
+  () => true, // canMoveToTarget
+  () => {},   // onCollison
+  () => {},   // addCollison
+  () => {}    // removeCollison
 ]);
 
 const World = props => {
@@ -25,10 +31,35 @@ const World = props => {
       return prevPositions;
     });
   };
+  const canMoveToTarget = (nextX, nextY, positionId) => {
+    let canMove = true;
+
+    const nextPosition = makeFormattedPosition({
+      ...allPositions[positionId],
+      x: nextX,
+      y: nextY
+    });
+
+    Object.keys(allPositions).forEach(id => {
+      if (id !== positionId) {
+        const otherPosition = makeFormattedPosition(allPositions[id]);
+        if (isInteracting(otherPosition, nextPosition)) {
+          canMove = false;
+        }
+      }
+    });
+
+    return canMove;
+  };
   const value = [
     allPositions,
     addSelf,
-    removeSelf
+    removeSelf,
+    canMoveToTarget,
+    // TODO
+    () => {},
+    () => {},
+    () => {}
   ];
   return (
     <WorldContext.Provider value={value}>

@@ -18,6 +18,7 @@ const Sprite = props => {
         height: props.position.height,
         ...props.style
       }}
+      id={props.position.id}
     />
   );
 };

@@ -81,24 +81,24 @@ const City = props => {
 
 const PokemonDemo = () => {
   const [userPosition, moveUser] = usePosition(150, 150, 64, 64);
-  const [setting, setSetting] = useState('poke-center');
+  const [setting, setSetting] = useState('city');
 
   const onKeyDown = useCallback(e => {
     // Left
     if (e.keyCode === 37) {
-      moveUser(userPosition.x - 10);
+      moveUser(userPosition.x - 30, null, 100);
     }
     // Up
     if (e.keyCode === 38) {
-      moveUser(null, userPosition.y - 10);
+      moveUser(null, userPosition.y - 30, 100);
     }
     // Right
     if (e.keyCode === 39) {
-      moveUser(userPosition.x + 10);
+      moveUser(userPosition.x + 30, null, 100);
     }
     // Down
     if (e.keyCode === 40) {
-      moveUser(null, userPosition.y + 10);
+      moveUser(null, userPosition.y + 30, 100);
     }
   }, [moveUser, userPosition]);
 

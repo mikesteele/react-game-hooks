@@ -4,6 +4,41 @@ Hooks can be found in `src/react-game-hooks`.
 
 Demos can be found in `src/demos`.
 
+### Basics
+
+The most basic game that can be created with this library looks like this:
+
+```jsx
+import {
+  useCollision,
+  usePosition,
+  Sprite,
+  withWorld
+ } from '../react-game-hooks';
+
+const Game = () => {
+  const [userPosition, moveUser] = usePosition(...);
+  const [enemyPosition] = usePosition(...);
+  
+  useCollison(userPosition, enemyPosition, () => alert('Game over!');
+  
+  return (
+    <div>
+      <Sprite position={userPosition} />
+      <Sprite position={enemyPosition} />
+    </div>
+  );
+};
+
+export default withWorld(Game);
+```
+
+This game defined two **positions** (with usePosition) which represent objects in 2D space. It renders them to the screen using the **Sprite** component.
+
+It defines a **collision** (with useCollision) between the user and the enemy. If they collide, the callback fires. Game over!
+
+The game is wrapped in a **world** (with the withWorld HOC) which is required to the useCollision hook.
+
 ### API
 
 ### Positions

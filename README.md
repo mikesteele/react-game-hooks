@@ -1,5 +1,11 @@
 ## react-game-hooks [WIP]
 
+A library for creating 2D games with React.
+
+It focuses primarily on bounding box calculation and collsions.
+
+This is an experiment and not ready for production.
+
 Hooks can be found in `src/react-game-hooks`.
 
 Demos can be found in `src/demos`.

@@ -20,7 +20,7 @@ const Game = () => {
   const [userPosition, moveUser] = usePosition(...);
   const [enemyPosition] = usePosition(...);
   
-  useCollison(userPosition, enemyPosition, () => alert('Game over!');
+  useCollison(userPosition, enemyPosition, () => alert('Game over!'));
   
   return (
     <div>
@@ -33,11 +33,11 @@ const Game = () => {
 export default withWorld(Game);
 ```
 
-This game defined two **positions** (with usePosition) which represent objects in 2D space. It renders them to the screen using the **Sprite** component.
+This game defined two **positions** (with `usePosition`) which represent objects in 2D space. It renders them to the screen using the **Sprite** component.
 
-It defines a **collision** (with useCollision) between the user and the enemy. If they collide, the callback fires. Game over!
+It defines a **collision** (with `useCollision`) between the user and the enemy. If they collide, the callback fires. Game over!
 
-The game is wrapped in a **world** (with the withWorld HOC) which is required to the useCollision hook.
+The game is wrapped in a **world** (with the `withWorld` HOC) which is required to the useCollision hook.
 
 ### API
 

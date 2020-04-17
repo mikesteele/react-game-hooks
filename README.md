@@ -4,7 +4,7 @@ A library for creating 2D games with React.
 
 It focuses primarily on bounding box calculation and collision detection.
 
-This is an experiment and not ready for production.
+This is an experiment and not meant for production.
 
 Hooks can be found in `src/react-game-hooks`.
 

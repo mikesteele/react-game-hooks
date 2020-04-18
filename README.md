@@ -51,7 +51,7 @@ Due to the <a href="https://reactjs.org/docs/hooks-rules.html">rules of hooks</a
 
 For this reason, this library allows `off` as an optional parameter to `usePosition`:
 
-```
+```jsx
 const [position, movePosition] = usePosition(initialX, initialY, width, height, off);
 ```
 
@@ -185,7 +185,7 @@ World allows for positions to be aware of other positions, to cancel movements a
 
 Wrap your App in `withWorld`:
 
-```
+```jsx
 withWorld(App);
 ```
 

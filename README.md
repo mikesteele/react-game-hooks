@@ -45,6 +45,41 @@ It defines a **collision** (with `useCollision`) between the user and the enemy.
 
 The game is wrapped in a **world** (with the `withWorld` HOC) which is required to the useCollision hook.
 
+### Conditional Positions
+
+Due to the <a href="https://reactjs.org/docs/hooks-rules.html">rules of hooks</a>, we can't wrap our `usePosition` calls in conditions. But whether or not objects exist in a current game scene are often tied to game state. (eg. show a mushroom if the user hasn't already picked it up, show this NPC if the game's season is summer)
+
+For this reason, this library allows `off` as an optional parameter to `usePosition`:
+
+```
+const [position, movePosition] = usePosition(initialX, initialY, width, height, off);
+```
+
+`Sprite` handles `position.off` itself, so always render the position with Sprite.
+
+:x:
+```jsx
+{!position.off && (<Sprite position={position}/>)}
+```
+```jsx
+{someState && (<Sprite position={position}/>)}
+```
+
+:white_check_mark:
+```jsx
+// Make `off` controlled by state
+const [position] = usePosition(initialX, initialY, width, height, someState);
+
+return (
+  <Sprite position={position}/> /* Have Sprite handle whether or not to show */
+);
+```
+
+### Composing scenes 
+
+However, if multiple objects and collisions 
+
+
 ### API
 
 ### Positions

@@ -28,7 +28,7 @@ export const makeFormattedPosition = position => {
   };
 };
 
-const usePosition = (x, y, width, height) => {
+const usePosition = (x, y, width, height, off) => {
   const [id] = useState(uniqueId());
   const [allPositions, addSelf, removeSelf, canMoveToTarget, onCollison] = useContext(WorldContext);
 
@@ -44,9 +44,11 @@ const usePosition = (x, y, width, height) => {
 
   // On mount, register with world context
   useEffect(() => {
-    addSelf(initialPosition);
+    if (!off) {
+      addSelf(initialPosition);
+    }
     return () => removeSelf(initialPosition)
-  }, []);
+  }, [off]);
 
   const boundingBox = {
     topLeft: {
@@ -63,7 +65,8 @@ const usePosition = (x, y, width, height) => {
     boundingBox,
     width,
     height,
-    id
+    id,
+    off
   };
   const [moveConfig, setMoveConfig] = React.useState({
     targetX: x,

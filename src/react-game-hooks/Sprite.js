@@ -16,6 +16,7 @@ const Sprite = props => {
         background,
         width: props.position.width,
         height: props.position.height,
+        display: props.position.off ? 'none' : 'block',
         ...props.style
       }}
       id={props.position.id}

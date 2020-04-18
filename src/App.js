@@ -3,6 +3,7 @@ import PositionDemo from './demos/PositionDemo';
 import PongDemo from './demos/PongDemo';
 import ChromeDinosaurDemo from './demos/ChromeDinosaurDemo';
 import PokemonDemo from './demos/PokemonDemo';
+import ConditionalPositionsDemo from './demos/ConditionalPositionsDemo';
 import { css } from 'emotion';
 
 const button = css`
@@ -15,7 +16,8 @@ const demos = {
   position: <PositionDemo />,
   pong: <PongDemo />,
   dinosaur: <ChromeDinosaurDemo />,
-  pokemon: <PokemonDemo />
+  pokemon: <PokemonDemo />,
+  conditional_positions: <ConditionalPositionsDemo />
 }
 
 const App = () => {

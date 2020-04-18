@@ -68,18 +68,100 @@ const [position, movePosition] = usePosition(initialX, initialY, width, height, 
 :white_check_mark:
 ```jsx
 const [someState] = React.useState(true);
+
 // Make `off` controlled by state
 const [position] = usePosition(initialX, initialY, width, height, someState);
 
 return (
-  <Sprite position={position}/> /* Have Sprite handle whether or not to show */
+  <Sprite position={position}/> /* Have Sprite handle whether or not to show on screen */
 );
 ```
 
 ### Composing scenes 
 
-However, if multiple objects and collisions 
+If multiple objects and collisions are `off` with the same logic, it may make more sense to abstract them away into their own components. 
 
+Consider a location where certain items are in the world depending on the time of year:
+
+```jsx
+// For brevity, usePosition initialX, initialY, width and height params have been shorted with ....
+
+const Farm = props => {
+  const { currentSeason, userPosition, pickUpItem } = props;
+  
+  const isAutumn = currentSeason === 'autumn';
+  const isWinter = currentSeason === 'winter';
+  
+  // Autumn items
+  const [mushroom] = usePosition(...., !isAutumn);
+  const [truffle] = usePosition(...., !isAutumn);
+
+  // Winter items
+  const [snowflake] = usePosition(...., !isWinter);
+ 
+  // If we run into any item, add it to our inventory
+  useCollision(userPosition, mushroom, () => pickUpItem('mushroom'));
+  useCollision(userPosition, truffle, () => pickUpItem('truffle'));
+  useCollision(userPosition, snowflake, () => pickUpItem('snowflake'));
+  
+  return (
+    <div>
+      <Sprite position={mushroom} />
+      <Sprite position={truffle} />
+      <Sprite position={snowflake} />
+    </div>
+  );
+};
+
+```
+
+Since positions are really tied to `currentSeason`, it makes more sense here to split our `Farm` into sub-components:
+
+```jsx
+const Farm = props => {
+  if (props.currentSeason === 'autumn') {
+    return (
+      <AutumnFarm {...props} />
+    );
+  } else if (props.currentSeason === 'winter') {
+    return (
+      <WinterFarm {...props} />
+    );
+  } else {
+    return null;
+  }
+}
+
+const AutumnFarm = props => {
+  const { userPosition, pickUpItem } = props;
+  
+  const [mushroom] = usePosition(....);
+  const [truffle] = usePosition(....);
+
+  useCollision(userPosition, mushroom, () => pickUpItem('mushroom'));
+  useCollision(userPosition, truffle, () => pickUpItem('truffle'));
+  
+  return (
+    <div>
+      <Sprite position={mushroom} />
+      <Sprite position={truffle} />
+    </div>
+  );
+};
+
+const WinterFarm = props => {
+  const { userPosition, pickUpItem } = props;
+  
+  const [snowflake] = usePosition(....);
+  useCollision(userPosition, snowflake, () => pickUpItem('snowflake'));
+  
+  return (
+    <div>
+      <Sprite position={snowflake} />
+    </div>
+  );
+};
+```
 
 ### API
 

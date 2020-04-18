@@ -55,6 +55,8 @@ For this reason, this library allows `off` as an optional parameter to `usePosit
 const [position, movePosition] = usePosition(initialX, initialY, width, height, off);
 ```
 
+Off positions will not trigger collisions and will not appear on screen.
+
 `Sprite` handles `position.off` itself, so always render the position with Sprite.
 
 :x:

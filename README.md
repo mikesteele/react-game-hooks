@@ -67,6 +67,7 @@ const [position, movePosition] = usePosition(initialX, initialY, width, height, 
 
 :white_check_mark:
 ```jsx
+const [someState] = React.useState(true);
 // Make `off` controlled by state
 const [position] = usePosition(initialX, initialY, width, height, someState);
 

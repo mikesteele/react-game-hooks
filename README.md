@@ -163,7 +163,7 @@ const WinterFarm = props => {
 };
 ```
 
-In practice, it seems like complex games would need to use a combination of `position.off` and composition. If we wanted the item to disappear from the world once we pick it up, we'd need to turn off the item position or create another component for that case. Since the state deriving whether or not each object is in the world is unique to each item (eg. `didPickUpMushroom`, `didPickUpSnowflake`) abstracting away doesn't make sense.
+In practice, it seems like complex games would need to use a combination of `position.off` and composition. If we wanted the item to disappear from the world once we pick it up, we'd need to turn off the item position or create another component for that case. But each item has a different value driving whether or not it's off (eg. `didPickUpMushroom`, `didPickUpSnowflake`) so abstracting away doesn't make sense.
 
 
 ### API

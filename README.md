@@ -88,6 +88,8 @@ const [position, movePosition] = usePosition(initialX, initialY, width, height, 
 
 Off positions will not trigger collisions and will not appear on screen.
 
+Unlike initialX and initialY, changing `off` will cause the position to be added/remove from the scene.
+
 `Sprite` handles `position.off` itself, so always render the position with Sprite.
 
 :x:

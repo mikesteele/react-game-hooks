@@ -45,6 +45,37 @@ It defines a **collision** (with `useCollision`) between the user and the enemy.
 
 The game is wrapped in a **world** (with the `withWorld` HOC) which is required to the useCollision hook.
 
+### Moving Positions
+
+`usePosition` takes `initialX` and `initialY` as parameters. It will not update the positions' coordinates if these are changed.
+
+Instead, use the `move` function provided by `usePosition`. If you want the position to move according to a value change, wrap it in an effect. An example:
+
+:x:
+
+```jsx
+const { x, y, width, height } = props;
+
+// This will start the position at x, y, but not move it if they change
+const [position] = usePosition(x, y, width, height);
+```
+
+:white_check_mark:
+
+```jsx
+const { x, y, width, height } = props;
+
+// Initial position at x, y
+const [position, movePosition] = usePosition(x, y, width, height);
+
+// If they ever change, call `move`
+React.useEffect(() => {
+  movePosition(x, y, 100);
+}, [movePosition, x, y])
+```
+
+This is because movements in this library are not instantaneous and require a time. (here `100` milliseconds) This is because they could collide with something before reaching the requested x and y, and cause the movement to be aborted. 
+
 ### Conditional Positions
 
 Due to the <a href="https://reactjs.org/docs/hooks-rules.html">rules of hooks</a>, we can't wrap our `usePosition` calls in conditions. But whether or not objects exist in a current game scene are often tied to game state. (eg. show a mushroom if the user hasn't already picked it up, show this NPC if the game's season is summer)

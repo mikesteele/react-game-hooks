@@ -229,7 +229,7 @@ withWorld(App);
 
 ### Collisions
 
-#### useInteraction(position, position, callback)
+#### useCollision(position, position, callback)
 
 Creates a collision listener for two positions.
 

@@ -207,7 +207,7 @@ In practice, it seems like complex games would need to use a combination of `pos
 
 Positions represent objects in 2D space. They come with a bounding box that allows for collision detection with other positions via `useInteraction`.
 
-#### const [position, move(newX, newY, timeLength)] = usePosition(x, y, width, height)
+#### const [position, move(newX, newY, timeLength)] = usePosition(x, y, width, height, off)
 
 Creates a controlled position.
 

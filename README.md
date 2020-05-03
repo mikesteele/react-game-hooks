@@ -23,8 +23,8 @@ import {
  } from '../react-game-hooks';
 
 const Game = () => {
-  const [userPosition, moveUser] = usePosition(...);
-  const [enemyPosition] = usePosition(...);
+  const [userPosition, moveUser] = usePosition(0, 0, 60, 60);
+  const [enemyPosition] = usePosition(100, 100, 60, 60);
   
   useCollison(userPosition, enemyPosition, () => alert('Game over!'));
   

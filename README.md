@@ -233,6 +233,8 @@ withWorld(App);
 
 Creates a collision listener for two positions.
 
+***
+
 ### Roadmap ideas
 
 #### useCollisonWithKeypress(position1, position2, keycode, callback)

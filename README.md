@@ -233,3 +233,10 @@ withWorld(App);
 
 Creates a collision listener for two positions.
 
+### Roadmap ideas
+
+#### useCollisonWithKeypress(position1, position2, keycode, callback)
+
+This would allow a collison + keypress listener. Think Pokemon Blue: the user walks up to the PC (a collison) and hits the A button to open the PC.
+
+

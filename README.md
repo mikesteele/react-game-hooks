@@ -241,4 +241,6 @@ Creates a collision listener for two positions.
 
 This would allow a collison + keypress listener. Think Pokemon Blue: the user walks up to the PC (a collison) and hits the A button to open the PC.
 
+### Adding "off" for Collisons
 
+Similar to the `off` parameter for positions, collisons should be able to be turned off if in certain game state. Similar to the example above, hitting the A button should open the PC, but only if the PC isn't already open.

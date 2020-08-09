@@ -30,7 +30,19 @@ export const makeFormattedPosition = position => {
 
 const usePosition = (x, y, width, height, off) => {
   const [id] = useState(uniqueId());
-  const [allPositions, addSelf, removeSelf, canMoveToTarget, onCollison] = useContext(WorldContext);
+  const [
+    allPositions,
+    addSelf,
+    removeSelf,
+    canMoveToTarget,
+    onCollison,
+    addCollison,
+    removeCollison,
+    addCollisonWithKeypress,
+    removeCollisonWithKeypress,
+    onMoveSuccessful,
+    touches // TODO - Remove
+  ] = useContext(WorldContext);
 
   const initialPosition = {
     x,
@@ -118,9 +130,11 @@ const usePosition = (x, y, width, height, off) => {
           yDelta: 0
         });
         onCollison(id, collisionTargetId);
+      } else {
+        onMoveSuccessful(id);
       }
     }
-  }, [position, moveConfig, setMoveConfig, addSelf, canMoveToTarget]);
+  }, [position, moveConfig, setMoveConfig, addSelf, canMoveToTarget, id]);
   useInterval(moveCallback, UPDATE_RATE);
   const requestMove = useCallback((targetX, targetY, timeLength) => {
     const time = timeLength || 1;

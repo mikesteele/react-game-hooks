@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import {
   useCollision,
+  useCollisionWithKeypress,
   useInterval,
   usePosition,
   useInteraction,
@@ -32,7 +33,7 @@ const PokeCenter = props => {
     moveUser(700, 150, 1);
   }, []);
 
-  useCollision(userPosition, exitDoorPosition, () => {
+  useCollisionWithKeypress(userPosition, exitDoorPosition, 65, () => {
     setSetting('city');
     moveUser(300, 200, 1);
   });

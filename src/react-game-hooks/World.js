@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { isInteracting } from './useInteraction';
 import { makeFormattedPosition } from './usePosition';
+import _get from 'lodash/get';
 import _set from 'lodash/set';
 
 export const withWorld = WrappedComponent => props => (
@@ -26,7 +27,7 @@ export const WorldContext = React.createContext([
 const World = props => {
   const [allPositions, setAllPositions] = React.useState({});
   const [allCollisons, setAllCollisons] = React.useState({});
-  // const [allCollisonsWithKeypress, setAllCollisonsWithKeypress] = React.useState({});
+  const [allCollisonsWithKeypress, setAllCollisonsWithKeypress] = React.useState({});
   const [touches, setTouches] = React.useState({});
   const addSelf = (position) => setAllPositions(prevPositions => {
     const nextPositions = {...prevPositions};
@@ -108,36 +109,23 @@ const World = props => {
     });
   }, [setAllCollisons]);
 
-  /**
-
-  const addCollisonWithKeypress = useCallback((position1, position2, id, callback) => {
+  const addCollisonWithKeypress = useCallback((position1, position2, keycode, id, callback) => {
     const p1 = position1.id;
     const p2 = position2.id;
-    setAllCollisons(collisions => {
-      if (collisions[p1] && collisions[p1][p2]) {
-        collisions[p1][p2][id] = callback;
-      } else if (collisions[p1]) {
-        collisions[p1][p2] = {};
-        collisions[p1][p2][id] = callback;
-      } else {
-        collisions[p1] = {};
-        collisions[p1][p2] = {};
-        collisions[p1][p2][id] = callback;
-      };
+    setAllCollisonsWithKeypress(collisions => {
+      _set(collisions, [keycode, p1, p2, id], callback);
       return collisions;
     });
   }, [setAllCollisonsWithKeypress]);
 
-  const removeCollisonWithKeypress = useCallback((position1, position2, id) => {
+  const removeCollisonWithKeypress = useCallback((position1, position2, keycode, id) => {
     const p1 = position1.id;
     const p2 = position2.id;
-    setAllCollisonWithKeypresses(collisions => {
-      delete collisions[p1][p2][id];
+    setAllCollisonsWithKeypress(collisions => {
+      delete collisions[keycode][p1][p2][id];
       return collisions;
     });
   }, [setAllCollisonsWithKeypress]);
-
-  **/
 
   const onMoveSuccessful = useCallback((id) => {
     setTouches(touches => {
@@ -152,16 +140,26 @@ const World = props => {
     });
   }, [setTouches]);
 
-  const cb = useCallback(e => {
-    if (e.keyCode === 65) {
-      console.log(touches);
+  const onKeyDown = useCallback(e => {
+    const keycode = e.keyCode;
+    if (keycode && allCollisonsWithKeypress[keycode]) {
+      Object.keys(allCollisonsWithKeypress[keycode]).forEach(p1 => {
+        Object.keys(allCollisonsWithKeypress[keycode][p1]).forEach(p2 => {
+          if (_get(touches, [p1, p2]) || _get(touches, [p2, p1])) {
+            Object.keys(allCollisonsWithKeypress[keycode][p1][p2]).forEach(key => {
+              // Fire all listeners
+              allCollisonsWithKeypress[keycode][p1][p2][key]();
+            });
+          }
+        });
+      })
     }
   }, [touches]);
 
   useEffect(() => {
-    document.body.addEventListener('keydown', cb);
-    return () => document.body.removeEventListener('keydown', cb);
-  }, [cb]);
+    document.body.addEventListener('keydown', onKeyDown);
+    return () => document.body.removeEventListener('keydown', onKeyDown);
+  }, [onKeyDown]);
 
   const value = [
     allPositions,
@@ -171,8 +169,8 @@ const World = props => {
     onCollison,
     addCollison,
     removeCollison,
-    () => {},
-    () => {},
+    addCollisonWithKeypress,
+    removeCollisonWithKeypress,
     onMoveSuccessful,
     touches // TODO - Remove
   ];

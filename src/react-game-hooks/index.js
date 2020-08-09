@@ -6,10 +6,12 @@ import World, { withWorld } from './World';
 import useWalls from './useWalls';
 import Sprite from './Sprite';
 import useCollision from './useCollision';
+import useCollisionWithKeypress from './useCollisonWithKeypress';
 
 export {
   Sprite,
   useCollision,
+  useCollisionWithKeypress,
   useFrameRateInterval,
   useInteraction,
   useInterval,

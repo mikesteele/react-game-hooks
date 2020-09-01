@@ -1,5 +1,7 @@
+import React from 'react';
 import usePosition from './usePosition';
 import { MIN_X, MIN_Y, MAX_X, MAX_Y } from './constants';
+import Sprite from './Sprite';
 
 const FULL_WIDTH = MAX_X - MIN_X;
 
@@ -16,4 +18,11 @@ const useWalls = (topLeftX, topLeftY, topRightX, topRightY, bottomRightX, bottom
   ];
 }
 
+const Walls = props => {
+  return props.walls.map(wallPosition => (
+    <Sprite position={wallPosition} backgroundColor={props.backgroundColor} />
+  ));
+};
+
 export default useWalls;
+export { Walls };

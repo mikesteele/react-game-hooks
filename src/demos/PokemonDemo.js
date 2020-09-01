@@ -14,65 +14,94 @@ import {
   useInteraction,
   useWalls,
   withWorld,
-  Sprite
+  Sprite,
+  Walls
 } from '../react-game-hooks';
+import { css } from 'emotion';
+
+const pokecenter = css`
+  background: url('pokecenter.png');
+  background-repeat: no-repeat;
+  width: 900px;
+  height: 516px;
+  position: absolute;
+  top: 24px;
+  left: 24px;
+`;
+
+const city = css`
+  background: url('city.png');
+  background-repeat: no-repeat;
+  width: 800px;
+  height: 720px;
+  position: absolute;
+  top: 24px;
+  left: 24px;
+`;
 
 const PokeCenter = props => {
   const { userPosition, setSetting, moveUser } = props;
 
-  const [
-    topWallPosition,
-    leftWallPosition,
-    rightWallPosition,
-    bottomWallPosition
-  ] = useWalls(300, 100, 800, 300, 800, 600, 300, 600);
+  const walls = useWalls(24, 24, 920, 24, 920, 540, 24, 540);
+  const [exitDoorPosition] = usePosition(212, 475, 130, 64);
+  const [pcPosition] = usePosition(854, 220, 70, 100);
 
-  const [exitDoorPosition] = usePosition(700, 100, 64, 16);
+  // Non-interactive positions
+  const [counterPosition] = usePosition(24, 24, 900, 200);
+  const [sofaPosition] = usePosition(24, 220, 70, 200);
+  const [leftTreesPosition] = usePosition(24, 420, 130, 120);
+  const [centerTreesPosition] = usePosition(410, 420, 130, 120);
+  const [rightTreesPosition] = usePosition(790, 420, 130, 120);
 
-  useEffect(() => {
-    moveUser(700, 150, 1);
-  }, []);
-
-  useCollisionWithKeypress(userPosition, exitDoorPosition, 65, () => {
+  useCollision(userPosition, exitDoorPosition, () => {
     setSetting('city');
     moveUser(300, 200, 1);
   });
 
+  const A_KEY = 65;
+  useCollisionWithKeypress(userPosition, pcPosition, A_KEY, () => {
+    alert('Ash booted the PC.');
+  });
+
   return (
     <>
+      <div className={pokecenter} />
+      <Walls walls={walls} backgroundColor='black' />
       <Sprite position={userPosition} backgroundColor='blue' />
-      <Sprite position={bottomWallPosition} backgroundColor='black' />
-      <Sprite position={topWallPosition} backgroundColor='black' />
-      <Sprite position={leftWallPosition} backgroundColor='black' />
-      <Sprite position={rightWallPosition} backgroundColor='black' />
-      <Sprite position={bottomWallPosition} backgroundColor='black' />
-      <Sprite position={exitDoorPosition} backgroundColor='red' />
+      <Sprite position={exitDoorPosition} backgroundColor='rgba(255, 0, 0, 0.3)' />
+      <Sprite position={pcPosition} backgroundColor='rgba(255, 0, 0, 0.3)' />
+      <Sprite position={counterPosition} backgroundColor='rgba(255, 0, 0, 0.3)' />
+      <Sprite position={sofaPosition} backgroundColor='rgba(255, 0, 0, 0.3)' />
+      <Sprite position={leftTreesPosition} backgroundColor='rgba(255, 0, 0, 0.3)' />
+      <Sprite position={centerTreesPosition} backgroundColor='rgba(255, 0, 0, 0.3)' />
+      <Sprite position={rightTreesPosition} backgroundColor='rgba(255, 0, 0, 0.3)' />
     </>
   )
 }
 
 const City = props => {
-  const { userPosition, setSetting } = props;
+  const { userPosition, setSetting, moveUser} = props;
 
   const [
     topWallPosition,
     leftWallPosition,
     rightWallPosition,
     bottomWallPosition
-  ] = useWalls(100, 100, 800, 100, 800, 500, 100, 500);
+  ] = useWalls(24, 24, 820, 24, 820, 600, 24, 600);
 
-  const [pokeCenterPosition] = usePosition(300, 300, 64, 64);
-  const [pokeCenterDoorPosition] = usePosition(314, 290, 36, 12);
+  const [pokeCenterDoorPosition] = usePosition(142, 225, 45, 38);
 
   useCollision(userPosition, pokeCenterDoorPosition, () => {
+    moveUser(330, 350, 20);
     setSetting('poke-center');
+
   });
 
   return (
     <>
+      <div className={city} />
       <Sprite position={userPosition} backgroundColor='blue' />
-      <Sprite position={pokeCenterPosition} backgroundColor='salmon' />
-      <Sprite position={pokeCenterDoorPosition} backgroundColor='green' />
+      <Sprite position={pokeCenterDoorPosition} backgroundColor='rgba(255, 0, 0, 0.3)' />
       <Sprite position={topWallPosition} backgroundColor='black'/>
       <Sprite position={leftWallPosition} backgroundColor='black'/>
       <Sprite position={rightWallPosition} backgroundColor='black'/>
@@ -82,27 +111,30 @@ const City = props => {
 };
 
 const PokemonDemo = () => {
-  const [userPosition, moveUser] = usePosition(150, 150, 64, 64);
+  const [userPosition, moveUser] = usePosition(120, 350, 64, 64);
   const [setting, setSetting] = useState('city');
+  const [controlsAreDisabled, setControlsAreDisabled] = useState(false);
 
   const onKeyDown = useCallback(e => {
-    // Left
-    if (e.keyCode === 37) {
-      moveUser(userPosition.x - 30, null, 100);
+    if (!controlsAreDisabled) {
+      // Left
+      if (e.keyCode === 37) {
+        moveUser(userPosition.x - 30, null, 100);
+      }
+      // Up
+      if (e.keyCode === 38) {
+        moveUser(null, userPosition.y - 30, 100);
+      }
+      // Right
+      if (e.keyCode === 39) {
+        moveUser(userPosition.x + 30, null, 100);
+      }
+      // Down
+      if (e.keyCode === 40) {
+        moveUser(null, userPosition.y + 30, 100);
+      }
     }
-    // Up
-    if (e.keyCode === 38) {
-      moveUser(null, userPosition.y - 30, 100);
-    }
-    // Right
-    if (e.keyCode === 39) {
-      moveUser(userPosition.x + 30, null, 100);
-    }
-    // Down
-    if (e.keyCode === 40) {
-      moveUser(null, userPosition.y + 30, 100);
-    }
-  }, [moveUser, userPosition]);
+  }, [moveUser, userPosition, controlsAreDisabled]);
 
   // Add onKeyDown listener to body
   useEffect(() => {
@@ -115,6 +147,7 @@ const PokemonDemo = () => {
       <City
         userPosition={userPosition}
         setSetting={setSetting}
+        moveUser={moveUser}
       />
     );
   } else if (setting === 'poke-center') {

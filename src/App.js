@@ -21,7 +21,7 @@ const demos = {
 }
 
 const App = () => {
-  const [demo, setDemo] = React.useState('');
+  const [demo, setDemo] = React.useState('pokemon');
   if (!demo) {
     return Object.keys(demos).map(name => (
       <button className={button} onClick={() => setDemo(name)}>

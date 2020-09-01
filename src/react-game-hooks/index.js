@@ -3,7 +3,7 @@ import useInteraction from './useInteraction';
 import useMovingPosition from './useMovingPosition';
 import usePosition from './usePosition';
 import World, { withWorld } from './World';
-import useWalls from './useWalls';
+import useWalls, { Walls } from './useWalls';
 import Sprite from './Sprite';
 import useCollision from './useCollision';
 import useCollisionWithKeypress from './useCollisonWithKeypress';
@@ -19,5 +19,6 @@ export {
   usePosition,
   useWalls,
   withWorld,
-  World
+  World,
+  Walls
 };

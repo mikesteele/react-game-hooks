@@ -151,7 +151,23 @@ const usePosition = (x, y, width, height, off) => {
       };
     });
   }, [setMoveConfig, position]);
-  return [formattedPosition, requestMove];
+  // TODO - Rename targetX, targetY
+  const requestRelativeMove = useCallback((targetX, targetY, timeLength) => {
+    const time = timeLength || 1;
+    setMoveConfig(previousMoveConfig => {
+      const nextTargetX = Number(targetX) ? previousMoveConfig.targetX + targetX : previousMoveConfig.targetX;
+      const nextTargetY = Number(targetY) ? previousMoveConfig.targetY + targetY : previousMoveConfig.targetY;
+      // FIXME - This should probably not recalculate xDelta/yDelta if only requesting movement in one dimension.
+      // See jumping in ChromeDinosaurDemo as an example.
+      return {
+        targetX: nextTargetX,
+        targetY: nextTargetY,
+        xDelta: (nextTargetX - position.x) / (time / UPDATE_RATE),
+        yDelta: (nextTargetY - position.y) / (time / UPDATE_RATE)
+      };
+    });
+  }, [setMoveConfig, position]);
+  return [formattedPosition, requestMove, requestRelativeMove];
 };
 
 export default usePosition;

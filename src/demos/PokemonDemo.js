@@ -55,7 +55,7 @@ const PokeCenter = props => {
 
   useCollision(userPosition, exitDoorPosition, () => {
     setSetting('city');
-    moveUser(300, 200, 1);
+    moveUser(130, 300, 100);
   });
 
   const A_KEY = 65;
@@ -92,9 +92,8 @@ const City = props => {
   const [pokeCenterDoorPosition] = usePosition(142, 225, 45, 38);
 
   useCollision(userPosition, pokeCenterDoorPosition, () => {
-    moveUser(330, 350, 20);
+    moveUser(250, 340, 100);
     setSetting('poke-center');
-
   });
 
   return (
@@ -111,30 +110,27 @@ const City = props => {
 };
 
 const PokemonDemo = () => {
-  const [userPosition, moveUser] = usePosition(120, 350, 64, 64);
+  const [userPosition, moveUser, moveUserRelative] = usePosition(120, 350, 64, 64);
   const [setting, setSetting] = useState('city');
-  const [controlsAreDisabled, setControlsAreDisabled] = useState(false);
 
   const onKeyDown = useCallback(e => {
-    if (!controlsAreDisabled) {
-      // Left
-      if (e.keyCode === 37) {
-        moveUser(userPosition.x - 30, null, 100);
-      }
-      // Up
-      if (e.keyCode === 38) {
-        moveUser(null, userPosition.y - 30, 100);
-      }
-      // Right
-      if (e.keyCode === 39) {
-        moveUser(userPosition.x + 30, null, 100);
-      }
-      // Down
-      if (e.keyCode === 40) {
-        moveUser(null, userPosition.y + 30, 100);
-      }
+    // Left
+    if (e.keyCode === 37) {
+      moveUserRelative(-30, null, 100);
     }
-  }, [moveUser, userPosition, controlsAreDisabled]);
+    // Up
+    if (e.keyCode === 38) {
+      moveUserRelative(null, -30, 100);
+    }
+    // Right
+    if (e.keyCode === 39) {
+      moveUserRelative(30, null, 100);
+    }
+    // Down
+    if (e.keyCode === 40) {
+      moveUserRelative(null, 30, 100);
+    }
+  }, [moveUserRelative]);
 
   // Add onKeyDown listener to body
   useEffect(() => {
